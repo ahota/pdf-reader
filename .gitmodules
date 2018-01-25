@@ -1,0 +1,3 @@
+[submodule "server/goldfish"]
+	path = server/goldfish
+	url = https://ahota@bitbucket.org/ahota/goldfish
