@@ -10,7 +10,7 @@ if not os.path.exists(UPLOAD_DIR):
     os.mkdir(UPLOAD_DIR)
 
 app = Flask(__name__)
-app.config['UPLOAD_DIR'] = upload_dir
+app.config['UPLOAD_DIR'] = UPLOAD_DIR
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -28,24 +28,14 @@ def _file_allowed(filename):
     extension is "pdf"
     '''
     base_filename, extension = os.path.splitext(filename)
-    print base_filename, extension
-    sys.stdout.flush()
     return extension and extension.lower() == '.pdf'
 
 def _get_upload(infile):
-    print infile
-    sys.stdout.flush()
     if infile and _file_allowed(infile.filename):
         # get and save the pdf
         filename = secure_filename(infile.filename)
-        print filename
-        sys.stdout.flush()
         save_path = os.path.join(app.config['UPLOAD_DIR'], filename)
-        print save_path
-        sys.stdout.flush()
         infile.save(save_path)
-        print 'file saved'
-        sys.stdout.flush()
 
         # use minecart to extract images from the pdf
 
