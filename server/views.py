@@ -1,19 +1,15 @@
-from flask import Flask, request, render_template
+from server import app
+
+from flask import request, render_template
 from werkzeug.utils import secure_filename
+
 import json
 import minecart
 import os
+import redis
 import sys
 
-sys.path.append('goldfish')
 from goldfish.watermarker import Watermarker
-
-UPLOAD_DIR = 'pdf_uploads'
-if not os.path.exists(UPLOAD_DIR):
-    os.mkdir(UPLOAD_DIR)
-
-app = Flask(__name__)
-app.config['UPLOAD_DIR'] = UPLOAD_DIR
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -91,6 +87,9 @@ def _get_upload(infile):
         _find_watermarks(images)
 
         # check each watermark against the db
+        db = app.config['IMAGE_DB']
+        print db
+        sys.stdout.flush()
 
         # return successful results
     return 0
