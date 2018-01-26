@@ -88,7 +88,21 @@ def _get_upload(infile):
 
         # check each watermark against the db
         db = app.config['IMAGE_DB']
-        print db
+        valid = 0
+        for image_info in images:
+            key = image_info['message'] 
+            if key != '':
+                data = db.get(key)
+                if data is not None:
+                    image_info['valid'] = True
+                    valid += 1
+                    print 'found!'
+                    print data
+                    sys.stdout.flush()
+                else:
+                    print 'not found'
+                    sys.stdout.flush()
+        print valid, 'valid images found'
         sys.stdout.flush()
 
         # return successful results
