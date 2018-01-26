@@ -9,7 +9,7 @@ import os
 import redis
 import sys
 
-from goldfish.watermarker import Watermarker
+from goldfish.entropy import EntropyWatermarker
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -19,8 +19,7 @@ def index():
         if 'file' not in request.files:
             return 'no file given'
         result = _get_upload(request.files['file'])
-        sys.stdout.flush()
-        return 'thanks for the file'
+        return json.dumps(result)
 
 def _file_allowed(filename):
     '''
@@ -64,15 +63,35 @@ def _find_images(infile):
     return images
 
 def _find_watermarks(images):
-    wm = Watermarker(chan='R', bits_per_pixel=4)
+    wm = EntropyWatermarker()
     candidates = 0
     for image_info in images:
         image_info['message'] = wm.extract(image_info['image_data'],
-                message_length=600)
+                message_length=256)
         candidates += 1
 
     print images
     print candidates, 'candidates found'
+    sys.stdout.flush()
+
+def _check_watermarks(images):
+    db = app.config['IMAGE_DB']
+    valid = 0
+    for image_info in images:
+        key = image_info['message'] 
+        if key != '':
+            data = db.get(key)
+            if data is not None:
+                image_info['valid'] = True
+                image_info['data'] = data
+                valid += 1
+                print 'found!'
+                print data
+                sys.stdout.flush()
+            else:
+                print 'not found'
+                sys.stdout.flush()
+    print valid, 'valid images found'
     sys.stdout.flush()
 
 def _get_upload(infile):
@@ -87,26 +106,18 @@ def _get_upload(infile):
         _find_watermarks(images)
 
         # check each watermark against the db
-        db = app.config['IMAGE_DB']
-        valid = 0
-        for image_info in images:
-            key = image_info['message'] 
-            if key != '':
-                data = db.get(key)
-                if data is not None:
-                    image_info['valid'] = True
-                    valid += 1
-                    print 'found!'
-                    print data
-                    sys.stdout.flush()
-                else:
-                    print 'not found'
-                    sys.stdout.flush()
-        print valid, 'valid images found'
-        sys.stdout.flush()
+        _check_watermarks(images)
 
         # return successful results
-    return 0
+        watermarked = []
+        for i in range(len(images)):
+            image_info = images[i]
+            if image_info['valid']:
+                image_info['image_data'] = ''
+                watermarked.append(image_info)
+        return watermarked
+    else:
+        return []
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
