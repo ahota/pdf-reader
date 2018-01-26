@@ -1,6 +1,6 @@
 from server import app
 
-from flask import request, render_template
+from flask import request, render_template, send_from_directory, send_file
 from werkzeug.utils import secure_filename
 
 import json
@@ -11,15 +11,38 @@ import sys
 
 from goldfish.entropy import EntropyWatermarker
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def index():
-    if request.method == 'GET':
-        return render_template('index.html')
-    else:
-        if 'file' not in request.files:
-            return 'no file given'
-        result = _get_upload(request.files['file'])
-        return json.dumps(result)
+    return render_template('index.html')
+
+@app.route('/upload', methods=['POST'])
+def upload():
+    if 'file' not in request.files:
+        return 'no file given'
+    result = _get_upload(request.files['file'])
+    app.config['RESULT'] = result
+    return render_template('reader.html')
+
+@app.route('/css/<path:path>')
+def style(path):
+    return send_from_directory('static/css', path)
+
+@app.route('/js/<path:path>')
+def js(path):
+    return send_from_directory('static/js', path)
+
+@app.route('/pdfs/<path:path>')
+def pdf(path):
+    print 'pdf url'
+    print path
+    sys.stdout.flush()
+    return send_file(os.path.join(app.config['UPLOAD_FOLDER'], path),
+            attachment_filename=app.config['LAST_FILENAME'],
+            cache_timeout=0)
+
+@app.route('/overlay_info')
+def get_overlay_info():
+    return json.dumps(app.config['RESULT'])
 
 def _file_allowed(filename):
     '''
@@ -31,8 +54,13 @@ def _file_allowed(filename):
 
 def _save_file(infile):
     filename = secure_filename(infile.filename)
-    save_path = os.path.join(app.config['UPLOAD_DIR'], filename)
-    infile.save(save_path)
+    forced_filename = 'last.pdf'
+    app.config['LAST_FILENAME'] = filename
+    app.config['SAVE_PATH'] = os.path.join(app.config['UPLOAD_FOLDER'],
+            forced_filename)
+    infile.save(app.config['SAVE_PATH'])
+    print app.config['SAVE_PATH']
+    sys.stdout.flush()
 
 def _find_images(infile):
     document = minecart.Document(infile)

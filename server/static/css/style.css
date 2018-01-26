@@ -1,0 +1,55 @@
+body
+{
+    background-color: #eee;
+    color: #333;
+    font-family: sans-serif;
+    font-size: 10pt;
+}
+
+#content
+{
+    position: relative;
+}
+
+#the-canvas
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#overlay-canvas
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.overlay-box
+{
+    display: block;
+    position: absolute;
+    border: 5px solid yellow;
+}
+
+.overlay-box-data
+{
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0;
+    transition: 0.5s ease;
+    color: #fff;
+}
+
+.overlay-box-data:hover {
+    opacity: 1;
+}
+
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
