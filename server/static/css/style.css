@@ -6,6 +6,46 @@ body
     font-size: 10pt;
 }
 
+#pdf-form
+{
+    width: 600px;
+    margin: 100px auto;
+}
+
+#pdf-form > h3
+{
+    text-align: center;
+}
+
+#pdf-form > p
+{
+    line-height: 1.25;
+    display: block;
+    margin-bottom: 1em;
+}
+
+#pdf-form hr
+{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#pdf-form > #foot
+{
+    font-size: 8pt;
+    color: #666;
+}
+
+#pdf-form a:link, #pdf-form a:visited
+{
+    color: #333;
+}
+
+#pdf-form a:hover, #pdf-form a:active
+{
+    color: #666;
+}
+
 #content
 {
     position: relative;

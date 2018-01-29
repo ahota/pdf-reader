@@ -5,12 +5,39 @@
         <link rel="stylesheet" type="text/css" href="/css/style.css">
     </head>
     <body>
-        hi
-        <br>
-        <form method="post" action="/upload" enctype="multipart/form-data">
-            <input type="file" name="file" accept=".pdf">
-            <input type="submit" id="submit">
-        </form>
-        <table id="returned-data"></table>
+        <div id="pdf-form">
+            <h3>Please upload a PDF file</h3>
+            <br>
+            <p>
+            This page is a demonstration of watermark extraction from images inside a PDF.
+            This capability allows for external data to be imperceptibly embedded into a
+            PDF, not through strippable metadata headers, but through digital image watermarking.
+            PDF files keep the binary representation of an image within the file itself, meaning
+            that even if an image is scaled or cropped in the PDF, the original version is still
+            accessible.
+            </p><p>
+            The images can be accessed and a watermark extraction can be attempted. Since the
+            methods explored are all blind, the extractor will always extract <i>something</i>,
+            so it is left to another verification step to determine if the data is valid. In this
+            case, watermarked images have a 32-byte key embedded within them using Entropy
+            Thresholding<sup>[1]</sup>. After extracting 32 bytes from each image, the bytes can
+            be used for lookup in a database. Only valid keys will have a hit, and then data for
+            those images is returned. The type of data stored in the database per key is an
+            application-level consideration.
+            </p><p>
+            On the next page, the PDF is rendered, and any images that contained valid keys will
+            have a yellow highlight. Clicking on these will show the information pulled from the
+            database.
+            </p>
+            <br>
+            <form method="post" action="/upload" enctype="multipart/form-data">
+                <input type="file" name="file" accept=".pdf">
+                <input type="submit" id="submit">
+            </form>
+            <hr>
+            <div id="foot">
+                [1] Solanki, K. (2005). Multimedia Data Hiding: From Fundamental Issues to Practical Techniques. University of California Santa Barbara. Retrieved from <a href="http://vision.ece.ucsb.edu/publications/05ThesisKaushal.pdf">http://vision.ece.ucsb.edu/publications/05ThesisKaushal.pdf</a>
+            </div>
+        </div>
     </body>
 </html>
