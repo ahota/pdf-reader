@@ -98,7 +98,7 @@ def _find_watermarks(images):
     candidates = 0
     for image_info in images:
         image_info['message'] = wm.extract(image_info['image_data'],
-                message_length=256)
+                message_length=128)
         candidates += 1
 
     print images

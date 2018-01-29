@@ -3,42 +3,46 @@
   z-index: 999999;
   background-color: #000;
   opacity: 0;
-  -webkit-transition: all 0.3s ease-out;
-  -moz-transition: all 0.3s ease-out;
-  -ms-transition: all 0.3s ease-out;
-  -o-transition: all 0.3s ease-out;
-  transition: all 0.3s ease-out; }
+  -webkit-transition: all 0.5s ease-out;
+  -moz-transition: all 0.5s ease-out;
+  -ms-transition: all 0.5s ease-out;
+  -o-transition: all 0.5s ease-out;
+  transition: all 0.5s ease-out; }
 
 .chardinjs-helper-layer {
   position: absolute;
   z-index: 9999998;
-  color: white;
-  -webkit-transition: all 0.3s ease-out;
-  -moz-transition: all 0.3s ease-out;
-  -ms-transition: all 0.3s ease-out;
-  -o-transition: all 0.3s ease-out;
-  transition: all 0.3s ease-out; }
+  color: #34435b;
+  -webkit-transition: all 0.5s ease-out;
+  -moz-transition: all 0.5s ease-out;
+  -ms-transition: all 0.5s ease-out;
+  -o-transition: all 0.5s ease-out;
+  transition: all 0.5s ease-out; }
   .chardinjs-helper-layer.chardinjs-left {
-    border-left: solid white 1px;
+    border-left: solid #34435b 1px;
     margin-left: -10px; }
   .chardinjs-helper-layer.chardinjs-right {
-    border-right: solid white 1px;
+    border-right: solid #34435b 1px;
+    box-sizing: content-box;
     padding-right: 10px; }
   .chardinjs-helper-layer.chardinjs-bottom {
-    border-bottom: solid white 1px;
+    border-bottom: solid #34435b 1px;
     padding-bottom: 10px; }
   .chardinjs-helper-layer.chardinjs-top {
-    border-top: solid white 1px;
+    border-top: solid #34435b 1px;
     padding-top: 10px; }
 
 .chardinjs-tooltip {
   position: absolute;
-  -webkit-transition: opacity 0.1s ease-out;
-  -moz-transition: opacity 0.1s ease-out;
-  -ms-transition: opacity 0.1s ease-out;
-  -o-transition: opacity 0.1s ease-out;
-  transition: opacity 0.1s ease-out;
-  max-width: 400px; }
+  -webkit-transition: opacity 0.5s ease;
+  -moz-transition: opacity 0.5s ease;
+  -ms-transition: opacity 0.5s ease;
+  -o-transition: opacity 0.5s ease;
+  transition: opacity 0.5s ease;
+  max-width: 400px;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 5px;}
   .chardinjs-tooltip.chardinjs-left {
     margin-left: -135px;
     padding-right: 10px; }
@@ -54,7 +58,7 @@
   .chardinjs-tooltip.chardinjs-right:before, .chardinjs-tooltip.chardinjs-left:after, .chardinjs-tooltip.chardinjs-bottom:before, .chardinjs-tooltip.chardinjs-top:after {
     content: ".";
     display: inline-block;
-    background-color: white;
+    background-color: #34435b;
     height: 1px;
     overflow: hidden;
     position: absolute; }

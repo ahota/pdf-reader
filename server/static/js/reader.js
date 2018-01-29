@@ -93,7 +93,7 @@ function setupOverlay(pageNum, scale) {
             boxBorder.style.width = box.style.width;
             boxBorder.style.height = box.style.height;
             box.setAttribute("data-intro", JSON.stringify($.parseJSON(overlay_data[index].data), null, 4));
-            if(overlay_data[index].bbox[0] < (parseInt(pageOverlay.style.width) / 2)) {
+            if(scaled_bbox[0] < (parseInt(pageOverlay.style.width) / 2)) {
                 box.setAttribute("data-position", "left");
             }
             else {

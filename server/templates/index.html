@@ -19,8 +19,8 @@
             The images can be accessed and a watermark extraction can be attempted. Since the
             methods explored are all blind, the extractor will always extract <i>something</i>,
             so it is left to another verification step to determine if the data is valid. In this
-            case, watermarked images have a 32-byte key embedded within them using Entropy
-            Thresholding<sup>[1]</sup>. After extracting 32 bytes from each image, the bytes can
+            case, watermarked images have a 16-byte key embedded within them using Entropy
+            Thresholding<sup>[1]</sup>. After extracting 16 bytes from each image, the bytes can
             be used for lookup in a database. Only valid keys will have a hit, and then data for
             those images is returned. The type of data stored in the database per key is an
             application-level consideration.
