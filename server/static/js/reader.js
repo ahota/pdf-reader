@@ -11,9 +11,18 @@ function renderPDF(url, container, scale) {
     // This means that the HTML only needs a container div and
     // no canvas elements
     function renderPage(page) {
-        console.log(page);
         var viewport = page.getViewport(scale);
+
+        var overlayContainer = document.createElement('div');
+        overlayContainer.setAttribute('class', 'overlay-container');
+        overlayContainer.style.zIndex = "10";
+
+        var pageContainer = document.createElement('div');
+        pageContainer.setAttribute('class', 'page-container');
+
         var canvas = document.createElement('canvas');
+        canvas.setAttribute('class', 'page-canvas');
+
         var context = canvas.getContext('2d');
         var renderContext = {
             canvasContext: context,
@@ -22,17 +31,28 @@ function renderPDF(url, container, scale) {
 
         canvas.height = viewport.height;
         canvas.width = viewport.width;
+        overlayContainer.style.height = canvas.height.toString() + "px";
+        overlayContainer.style.width = canvas.width.toString() + "px";
+        pageContainer.style.height = canvas.height.toString() + "px";
+        pageContainer.style.width = canvas.width.toString() + "px";
 
-        // set the container width so that the pages don't render side-by-side
+        // set the document container width so that the pages don't render
+        // side-by-side
         if(page.pageIndex == 0) {
-            container.style.height = canvas.height.toString() + "px";
             container.style.width = canvas.width.toString() + "px";
             container.style.margin = "10px auto";
         }
 
-        container.appendChild(canvas);
+        container.appendChild(pageContainer);
+        pageContainer.appendChild(overlayContainer);
+        pageContainer.appendChild(canvas);
 
-        page.render(renderContext);
+        page.render(renderContext).then(function() {
+            setupOverlay(page.pageNumber, scale);
+        },
+        function() {
+            console.log("me got error");
+        });
     }
 
     // iteratively render all the pages in the PDF
@@ -46,48 +66,56 @@ function renderPDF(url, container, scale) {
     PDFJS.getDocument(url).then(renderPages);
 }
 
-function setupOverlay(canvas) {
-    var overlay = document.getElementById('content');
-    overlay.style.height = canvas.height.toString() + "px";
-    overlay.style.width = canvas.width.toString() + "px";
-    overlay.style.margin = "10px auto";
-    $.ajax({
-        type: "GET",
-        url: "/overlay_info",
-        success: function(result) {
-            overlay_data = $.parseJSON(result);
-            console.log(overlay_data);
+function setupOverlay(pageNum, scale) {
+    for(var index = 0; index < overlay_data.length; index++) {
+        // check if there is a watermarked image on this page
+        console.log(index);
+        if(overlay_data[index].page == pageNum) {
+            console.log("adding to page " + pageNum.toString());
+            var pageOverlay = document.getElementsByClassName('overlay-container')[pageNum];
+
             var box = document.createElement("div");
             box.setAttribute("class", "overlay-box");
-            box.style.left = `${overlay_data[0].bbox[0]}px`;
-            box.style.bottom = `${overlay_data[0].bbox[1]}px`;
-            box.style.width = `${overlay_data[0].bbox[2] - overlay_data[0].bbox[0]}px`;
-            box.style.height = `${overlay_data[0].bbox[3] - overlay_data[0].bbox[1]}px`;
-            box.setAttribute("data-intro", overlay_data[0].data);
-            if(overlay_data[0].bbox[0] < (viewport.width / 2)) {
+            var scaled_bbox = [];
+            overlay_data[index].bbox.forEach(function(element) {
+                scaled_bbox.push(element * scale);
+            });
+            box.style.left = scaled_bbox[0] + "px";
+            box.style.bottom = scaled_bbox[1] + "px";
+            box.style.width = (scaled_bbox[2] - scaled_bbox[0]) + "px";
+            box.style.height = (scaled_bbox[3] - scaled_bbox[1]) + "px";
+            box.setAttribute("data-intro", overlay_data[index].data);
+            if(overlay_data[index].bbox[0] < (parseInt(pageOverlay.style.width) / 2)) {
                 box.setAttribute("data-position", "left");
             }
             else {
                 box.setAttribute("data-position", "right");
             }
             box.setAttribute("data-toggle", "chardinjs");
-            //var box_data = document.createElement("div");
-            //box_data.setAttribute("class", "overlay-box-data");
-            //box_data.innerHTML = overlay_data[0].data;
-            //box.appendChild(box_data);
-            overlay.appendChild(box);
-            $('.overlay-box').on("click", function(ev) {
-                ev.preventDefault();
-                console.log("hey");
-                $('body').chardinJs('toggle');
-            });
-        },
-        error: function(result) {
+            box.style.zIndex = "11";
+
+            // add Chardin.JS toggle event handler to all boxes
+            box.onclick = toggleChardinJS;
+
+            pageOverlay.appendChild(box);
         }
-    });
+    }
+}
+
+function toggleChardinJS() {
+    $('body').chardinJs('toggle');
 }
 
 $(document).ready(function() {
     var url = '/pdfs/last.pdf';
-    renderPDF(url, document.getElementById('content'));
+    $.ajax({
+        type: "GET",
+        url: "/overlay_info",
+        success: function(result) {
+            overlay_data = $.parseJSON(result);
+            renderPDF(url, document.getElementById('content'));
+        },
+        error: function(result) {
+        }
+    });
 });

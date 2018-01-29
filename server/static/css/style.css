@@ -11,14 +11,20 @@ body
     position: relative;
 }
 
-#the-canvas
+.page-container
+{
+    position: relative;
+    margin: 5px auto;
+}
+
+.page-canvas
 {
     position: absolute;
     top: 0;
     left: 0;
 }
 
-#overlay-canvas
+.overlay-container
 {
     position: absolute;
     top: 0;
