@@ -1,7 +1,7 @@
 from server import app
 
 from cStringIO import StringIO
-from flask import request, render_template, send_from_directory, send_file
+from flask import request, render_template, send_from_directory, send_file, redirect
 from werkzeug.utils import secure_filename
 
 import json
@@ -16,8 +16,10 @@ from goldfish.entropy import EntropyWatermarker
 def index():
     return render_template('index.html')
 
-@app.route('/upload', methods=['POST'])
+@app.route('/upload', methods=['GET', 'POST'])
 def upload():
+    if request.method == 'GET':
+        return redirect('/')
     if 'file' not in request.files:
         return 'no file given'
     result = _get_upload(request.files['file'])
@@ -148,7 +150,6 @@ def _get_upload(infile):
                 im_data = output.getvalue().encode('base64')
                 header = 'data:image/png;base64,' 
                 image_info['image_data'] = header + im_data
-                print image_info['image_data']
                 sys.stdout.flush()
                 watermarked.append(image_info)
         return watermarked

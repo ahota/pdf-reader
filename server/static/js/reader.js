@@ -78,6 +78,8 @@ function setupOverlay(pageNum, scale) {
             var box = document.createElement("img");
             box.setAttribute("class", "overlay-box");
             box.setAttribute("src", overlay_data[index].image_data);
+            var boxBorder = document.createElement('div');
+            boxBorder.setAttribute('class', 'overlay-box-border');
             var scaled_bbox = [];
             overlay_data[index].bbox.forEach(function(element) {
                 scaled_bbox.push(element * scale);
@@ -86,6 +88,10 @@ function setupOverlay(pageNum, scale) {
             box.style.bottom = scaled_bbox[1] + "px";
             box.style.width = (scaled_bbox[2] - scaled_bbox[0]) + "px";
             box.style.height = (scaled_bbox[3] - scaled_bbox[1]) + "px";
+            boxBorder.style.left = box.style.left;
+            boxBorder.style.bottom = box.style.bottom;
+            boxBorder.style.width = box.style.width;
+            boxBorder.style.height = box.style.height;
             box.setAttribute("data-intro", JSON.stringify($.parseJSON(overlay_data[index].data), null, 4));
             if(overlay_data[index].bbox[0] < (parseInt(pageOverlay.style.width) / 2)) {
                 box.setAttribute("data-position", "left");
@@ -98,6 +104,7 @@ function setupOverlay(pageNum, scale) {
             // add Chardin.JS toggle event handler to all boxes
             box.onclick = toggleChardinJS;
 
+            pageOverlay.appendChild(boxBorder);
             pageOverlay.appendChild(box);
         }
     }

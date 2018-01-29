@@ -35,7 +35,15 @@ body
 {
     display: block;
     position: absolute;
+}
+
+.overlay-box-border
+{
     border: 5px solid yellow;
+    display: block;
+    position: absolute;
+    z-index: 10;
+    pointer-events: none;
 }
 
 .overlay-box-data
