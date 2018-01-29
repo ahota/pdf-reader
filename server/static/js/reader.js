@@ -15,13 +15,14 @@ function renderPDF(url, container, scale) {
 
         var overlayContainer = document.createElement('div');
         overlayContainer.setAttribute('class', 'overlay-container');
-        overlayContainer.style.zIndex = "10";
+        //overlayContainer.style.zIndex = "10";
 
         var pageContainer = document.createElement('div');
         pageContainer.setAttribute('class', 'page-container');
 
         var canvas = document.createElement('canvas');
         canvas.setAttribute('class', 'page-canvas');
+        canvas.style.zIndex = "-1000";
 
         var context = canvas.getContext('2d');
         var renderContext = {
@@ -74,8 +75,9 @@ function setupOverlay(pageNum, scale) {
             console.log("adding to page " + pageNum.toString());
             var pageOverlay = document.getElementsByClassName('overlay-container')[pageNum];
 
-            var box = document.createElement("div");
+            var box = document.createElement("img");
             box.setAttribute("class", "overlay-box");
+            box.setAttribute("src", overlay_data[index].image_data);
             var scaled_bbox = [];
             overlay_data[index].bbox.forEach(function(element) {
                 scaled_bbox.push(element * scale);
@@ -91,8 +93,7 @@ function setupOverlay(pageNum, scale) {
             else {
                 box.setAttribute("data-position", "right");
             }
-            box.setAttribute("data-toggle", "chardinjs");
-            box.style.zIndex = "11";
+            //box.style.zIndex = "11";
 
             // add Chardin.JS toggle event handler to all boxes
             box.onclick = toggleChardinJS;

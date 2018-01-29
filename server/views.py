@@ -1,5 +1,6 @@
 from server import app
 
+from cStringIO import StringIO
 from flask import request, render_template, send_from_directory, send_file
 from werkzeug.utils import secure_filename
 
@@ -141,7 +142,14 @@ def _get_upload(infile):
         for i in range(len(images)):
             image_info = images[i]
             if image_info['valid']:
-                image_info['image_data'] = ''
+                # convert to base64
+                output = StringIO()
+                image_info['image_data'].save(output, format='PNG')
+                im_data = output.getvalue().encode('base64')
+                header = 'data:image/png;base64,' 
+                image_info['image_data'] = header + im_data
+                print image_info['image_data']
+                sys.stdout.flush()
                 watermarked.append(image_info)
         return watermarked
     else:
