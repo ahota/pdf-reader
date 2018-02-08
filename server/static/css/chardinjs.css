@@ -12,7 +12,7 @@
 .chardinjs-helper-layer {
   position: absolute;
   z-index: 9999998;
-  color: #34435b;
+  color: white;
   -webkit-transition: all 0.5s ease-out;
   -moz-transition: all 0.5s ease-out;
   -ms-transition: all 0.5s ease-out;
@@ -41,7 +41,7 @@
   transition: opacity 0.5s ease;
   max-width: 400px;
   padding: 10px;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.7);
   border-radius: 5px;}
   .chardinjs-tooltip.chardinjs-left {
     margin-left: -135px;
