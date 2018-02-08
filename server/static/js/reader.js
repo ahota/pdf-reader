@@ -73,7 +73,7 @@ function setupOverlay(pageNum, scale) {
         console.log(index);
         if(overlay_data[index].page == pageNum) {
             console.log("adding to page " + pageNum.toString());
-            var pageOverlay = document.getElementsByClassName('overlay-container')[pageNum];
+            var pageOverlay = document.getElementsByClassName('overlay-container')[pageNum-1];
 
             var box = document.createElement("img");
             box.setAttribute("class", "overlay-box");

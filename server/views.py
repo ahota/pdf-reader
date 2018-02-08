@@ -3,6 +3,7 @@ from server import app
 from cStringIO import StringIO
 from flask import request, render_template, send_from_directory, send_file, redirect
 from werkzeug.utils import secure_filename
+from pdfminer.pdftypes import PDFNotImplementedError
 
 import json
 import minecart
@@ -72,13 +73,28 @@ def _find_images(infile):
         sys.stdout.flush()
         return 'document was None'
     images = []
+    '''
     for page_num, page in enumerate(document.iter_pages()):
+    '''
+    page_num = 0
+    while True:
+        try:
+            page = document.get_page(page_num)
+        except:
+            print 'got error on page', page_num, ' - skipping'
+            page_num += 1
+            continue
+        if page is None:
+            break
+        page_num += 1
         for i in page.images:
             image_info = {}
             try:
                 image_info['image_data'] = i.as_pil()
             except ValueError as e:
                 print 'Got a ValueError, skipping'
+            except PDFNotImplementedError:
+                print 'Got a PDFNotImplementedError, skipping'
             else:
                 image_info['bbox'] = i.get_bbox()
                 image_info['page'] = page_num
@@ -94,7 +110,7 @@ def _find_images(infile):
     return images
 
 def _find_watermarks(images):
-    wm = EntropyWatermarker()
+    wm = EntropyWatermarker(quality=75,threshold=2000)
     candidates = 0
     for image_info in images:
         image_info['message'] = wm.extract(image_info['image_data'],
