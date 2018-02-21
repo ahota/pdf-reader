@@ -7,6 +7,7 @@ from pdfminer.pdftypes import PDFNotImplementedError
 
 import json
 import minecart
+import multiprocessing
 import os
 import redis
 import sys
@@ -109,17 +110,20 @@ def _find_images(infile):
 
     return images
 
-def _find_watermarks(images):
+def _do_work(image_info):
     wm = EntropyWatermarker(quality=75,threshold=2000)
-    candidates = 0
-    for image_info in images:
-        image_info['message'] = wm.extract(image_info['image_data'],
-                message_length=128)
-        candidates += 1
+    image_info['message'] = wm.extract(image_info['image_data'],
+            message_length=128)
+    return image_info
 
-    print images
+def _find_watermarks(images):
+    candidates = len(images)
+    pool = multiprocessing.Pool(min(len(images), 48))
+    results = pool.map(_do_work, images)
+    print results
     print candidates, 'candidates found'
     sys.stdout.flush()
+    return results
 
 def _check_watermarks(images):
     db = app.config['IMAGE_DB']
@@ -150,7 +154,7 @@ def _get_upload(infile):
         images = _find_images(infile)
 
         # for each image, use a goldfish extractor to get a watermark
-        _find_watermarks(images)
+        images = _find_watermarks(images)
 
         # check each watermark against the db
         _check_watermarks(images)
