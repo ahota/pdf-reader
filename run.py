@@ -79,6 +79,30 @@ test_data = {
             'isosurfaceValues' : [0.12, 27.59, 55.06, 82.53, 110.0],
             'cameraPosition' : [-280, 200, 175]
         },
+        '446f4adb901b54d5' : {
+            'author' : 'Alok Hota',
+            'organization' : 'University of Tennessee',
+            'email' : 'ahota@vols.utk.edu',
+            'machine' : socket.getfqdn(),
+            'filename' : '/data/turbulence.raw',
+            'dimensions' : [256, 256, 256],
+            'dataVariable' : 'velocity_magnitude',
+            'colorMap' : 'coolToWarm',
+            'isosurfaceValues' : [2],
+            'cameraPosition' : [256, 256, 256]
+        },
+        'dcfe34b862c777a5' : {
+            'author' : 'Alok Hota',
+            'organization' : 'University of Tennessee',
+            'email' : 'ahota@vols.utk.edu',
+            'machine' : socket.getfqdn(),
+            'filename' : '/data/run1/wrfprs_1993-03-13_22:00:00.nc',
+            'dimensions' : [254, 254, 37],
+            'dataVariable' : 'R_H_GDS3_ISBL',
+            'colorMap' : 'spectral reverse',
+            'isosurfaceValues' : [0.1, 25, 50, 75, 100],
+            "cameraPosition" : [-198.449, -221.429, 147.687]
+        },
         '87683740eaba1ad4' : {
             'author' : 'Alok Hota',
             'organization' : 'University of Tennessee',
