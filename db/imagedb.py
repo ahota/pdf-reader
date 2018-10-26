@@ -12,7 +12,14 @@ class ImageDB:
                 print 'existing key', key
                 print 'not doing anything'
                 return
-        self._db.set(key, value)
+        try:
+            self._db.set(key, value)
+        except redis.exceptions.ResponseError as error:
+            import sys
+            print 'ERROR:', error
+            print 'Try shutting down redis with redis-cli shutdown'
+            print 'If that does not work, ps aux | grep redis, and sudo kill it'
+            sys.exit(1)
 
     def get(self, key):
         return self._db.get(key)
