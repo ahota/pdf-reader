@@ -1,6 +1,7 @@
 from server import app
 from db import ImageDB
 
+import argparse
 import json
 import socket
 
@@ -118,11 +119,16 @@ test_data = {
 }
 
 if __name__ == '__main__':
-    idb = ImageDB(debug=True)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-g', '--debug', action='store_true')
+    parser.add_argument('-p', '--port', type=int, default=5000)
+    args = parser.parse_args()
+
+    idb = ImageDB(debug=args.debug)
 
     print 'adding keys to the db for testing'
     for dbkey, data in test_data.iteritems():
         idb.add(dbkey, json.dumps(data))
 
     app.config['IMAGE_DB'] = idb
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0', port=args.port)
