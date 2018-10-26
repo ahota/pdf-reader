@@ -123,6 +123,8 @@ def _find_watermarks(images):
     print results
     print candidates, 'candidates found'
     sys.stdout.flush()
+    pool.close()
+    pool.join()
     return results
 
 def _check_watermarks(images):
