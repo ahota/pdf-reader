@@ -11,6 +11,7 @@ function renderPDF(url, container, scale) {
     // This means that the HTML only needs a container div and
     // no canvas elements
     function renderPage(page) {
+        console.log(page);
         var viewport = page.getViewport(scale);
 
         var overlayContainer = document.createElement('div');
@@ -58,9 +59,18 @@ function renderPDF(url, container, scale) {
 
     // iteratively render all the pages in the PDF
     function renderPages(doc) {
+        const pagePromises = [];
         // 1-based indexing >_>
-        for(var p = 1; p <= doc.numPages; p++)
-            doc.getPage(p).then(renderPage);
+        for(var p = 1; p <= doc.numPages; p++) {
+            console.log(p);
+            pagePromises.push(doc.getPage(p));
+            //doc.getPage(p).then(renderPage);
+        }
+        console.log(pagePromises);
+        Promise.all(pagePromises).then(function(resultsArr) {
+            for(var i = 0; i < resultsArr.length; i++)
+                renderPage(resultsArr[i]);
+        });
     }
 
     PDFJS.disableWorker = true;
