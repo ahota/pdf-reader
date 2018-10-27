@@ -9,6 +9,7 @@ import json
 import minecart
 import multiprocessing
 import os
+import pprint
 import redis
 import sys
 
@@ -79,12 +80,7 @@ def _find_images(infile):
     '''
     page_num = 0
     while True:
-        try:
-            page = document.get_page(page_num)
-        except:
-            print 'got error on page', page_num, ' - skipping'
-            page_num += 1
-            continue
+        page = document.get_page(page_num)
         if page is None:
             break
         page_num += 1
@@ -104,7 +100,7 @@ def _find_images(infile):
                 image_info['data'] = ''
                 images.append(image_info)
 
-    print images
+    pprint.pprint(images)
     print len(images), 'images found'
     sys.stdout.flush()
 
@@ -120,7 +116,7 @@ def _find_watermarks(images):
     candidates = len(images)
     pool = multiprocessing.Pool(min(len(images), 48))
     results = pool.map(_do_work, images)
-    print results
+    pprint.pprint(results)
     print candidates, 'candidates found'
     sys.stdout.flush()
     pool.close()
