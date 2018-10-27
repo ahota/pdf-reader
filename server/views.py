@@ -111,7 +111,7 @@ def _find_images(infile):
     return images
 
 def _do_work(image_info):
-    wm = EntropyWatermarker(quality=75,threshold=2000)
+    wm = EntropyWatermarker(quality=75,threshold=140000,bits=40)
     image_info['message'] = wm.extract(image_info['image_data'],
             message_length=128)
     return image_info
