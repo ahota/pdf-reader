@@ -9,8 +9,6 @@ class ImageDB:
         if key in self._db.keys():
             if not self._debug:
                 # don't want to overwrite keys
-                print 'existing key', key
-                print 'not doing anything'
                 return
         try:
             self._db.set(key, value)
