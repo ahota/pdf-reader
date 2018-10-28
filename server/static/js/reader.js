@@ -1,5 +1,10 @@
 overlay_data = null;
 
+jsonkeyorder = ["author", "organization", "email", "machine", "filename",
+             "info", "dimensions", "dataVariable", "colormap",
+             "isosurfaceValues", "cameraPosition", "seedBoxExtents",
+             "seedSubsample"];
+
 // based on: https://gist.github.com/fcingolani/3300351
 function renderPDF(url, container, scale) {
 
@@ -102,7 +107,11 @@ function setupOverlay(pageNum, scale) {
             boxBorder.style.bottom = box.style.bottom;
             boxBorder.style.width = box.style.width;
             boxBorder.style.height = box.style.height;
-            box.setAttribute("data-intro", JSON.stringify($.parseJSON(overlay_data[index].data), null, 4));
+
+            var dataString = JSON.stringify($.parseJSON(overlay_data[index].data), jsonkeyorder, 4);
+            //dataString = stringWrapper(dataString);
+
+            box.setAttribute("data-intro", dataString);
             if(scaled_bbox[0] < (parseInt(pageOverlay.style.width) / 2)) {
                 box.setAttribute("data-position", "left");
             }
@@ -118,6 +127,29 @@ function setupOverlay(pageNum, scale) {
             pageOverlay.appendChild(box);
         }
     }
+}
+
+function stringWrapper(str) {
+    str = str.split("\n");
+    for(var s = 0; s < str.length; s++) {
+        str[s] = stringDivider(str[s], 50, "\n    ");
+    }
+    return str.join("\n");
+}
+
+// from: https://stackoverflow.com/a/14502311/4765406
+function stringDivider(str, width, replace) {
+    if(str.length > width) {
+        var p = width;
+        for(; p > 0 && str[p] != ' '; p--) {
+        }
+        if(p > 0) {
+            var left = str.substring(0, p);
+            var right = str.substring(p+1);
+            return left + replace + stringDivider(right, width, replace);
+        }
+    }
+    return str;
 }
 
 function toggleChardinJS() {
