@@ -44,6 +44,7 @@ test_data = {
             'cameraPosition' : [-280, 200, 175]
         },
         # the following are for the paper
+        # heptane surface - used in resubmission
         'ba30f594754a4b95' : {
             'author' : 'Alok Hota',
             'organization' : 'University of Tennessee',
@@ -56,6 +57,7 @@ test_data = {
             'isosurfaceValues' : [64],
             'cameraPosition' : [75, -200, 200]
         },
+        # magnetic surface - used in resubmission
         'a4e2e960e51d81dd' : {
             'author' : 'Alok Hota',
             'organization' : 'University of Tennessee',
@@ -68,30 +70,30 @@ test_data = {
             'isosurfaceValues' : [0.2],
             'cameraPosition' : [128, -256, 512]
         },
+        # tornado streamlines - used in resubmission
         '6cf01069b23cda94' : {
             'author' : 'Alok Hota',
             'organization' : 'University of Tennessee',
             'email' : 'ahota@vols.utk.edu',
             'machine' : socket.getfqdn(),
-            'filename' : '/data/interp8502.nc',
+            'filename' : '/data/interp9000.raw',
             'dimensions' : [280, 490, 490],
-            'dataVariable' : 'wind_velocity_magnitude',
-            'colorMap' : 'magma',
-            'isosurfaceValues' : [0.12, 27.59, 55.06, 82.53, 110.0],
+            'dataVariable' : 'wind_velocity',
+            'seedBoxExtents' : [150, 250, 150, 250, 0, 10],
+            'seedSubsample' : 10,
             'cameraPosition' : [-280, 200, 175]
         },
+        # girus molecule - used in resubmission
         '446f4adb901b54d5' : {
             'author' : 'Alok Hota',
             'organization' : 'University of Tennessee',
             'email' : 'ahota@vols.utk.edu',
             'machine' : socket.getfqdn(),
-            'filename' : '/data/turbulence.raw',
-            'dimensions' : [256, 256, 256],
-            'dataVariable' : 'velocity_magnitude',
-            'colorMap' : 'coolToWarm',
-            'isosurfaceValues' : [2],
-            'cameraPosition' : [256, 256, 256]
+            'filename' : '/data/crov_virus.xyz',
+            'info' : 'Pseudoatomic model of Cafeteria roenbergensis virus. Closeup view of the virus capsid. Data from River Xiao, cxiao@utep.edu',
+            'cameraPosition' : [0, 0, 1385]
         },
+        # superstorm surface - not used in resubmission
         'dcfe34b862c777a5' : {
             'author' : 'Alok Hota',
             'organization' : 'University of Tennessee',
@@ -104,6 +106,7 @@ test_data = {
             'isosurfaceValues' : [0.1, 25, 50, 75, 100],
             "cameraPosition" : [-198.449, -221.429, 147.687]
         },
+        # supernova surface - used in resubmission
         '87683740eaba1ad4' : {
             'author' : 'Alok Hota',
             'organization' : 'University of Tennessee',
@@ -131,4 +134,4 @@ if __name__ == '__main__':
         idb.add(dbkey, json.dumps(data))
 
     app.config['IMAGE_DB'] = idb
-    app.run(debug=True, host='0.0.0.0', port=args.port)
+    app.run(debug=args.debug, host='0.0.0.0', port=args.port)
