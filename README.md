@@ -1,4 +1,5 @@
-This is the PDF reader example for the watermarking paper
+This is the PDF reader example for "Embedding Meta-Information into
+Visualizations"
 It is composed of three parts:
 
     1. A Flask-based backend that receives a PDF file, searches its pages for
